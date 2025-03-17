@@ -1,0 +1,26 @@
+# Dossiers
+node_modules
+music
+playlists
+
+# Fichiers de développement
+.git
+.gitignore
+.DS_Store
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Fichiers Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Fichiers de documentation
+README.md
+CHANGELOG.md
+LICENSE
+
+# Scripts
+start.sh
+stop.sh

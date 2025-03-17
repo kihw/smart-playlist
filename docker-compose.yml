@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  smart-playlist:
+    build: .
+    container_name: smart-playlist-generator
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./music:/music
+      - ./playlists:/playlists
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - playlist-network
+
+networks:
+  playlist-network:
+    driver: bridge
