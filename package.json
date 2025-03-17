@@ -1,0 +1,18 @@
+{
+  "name": "smart-playlist-generator",
+  "version": "1.0.0",
+  "description": "Ce générateur avancé de playlists crée automatiquement des playlists \"mix\" inspirées de Spotify en regroupant les artistes ayant une logique ou un lien commun. La version améliorée propose une interface graphique et des options de personnalisation avancées.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "music-metadata": "^11.0.2"
+  }
+}

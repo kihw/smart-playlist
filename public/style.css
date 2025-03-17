@@ -1,0 +1,217 @@
+/* Styles personnalisés pour le générateur de playlists */
+
+:root {
+  --primary-color: #6c5ce7;
+  --primary-hover: #5649c0;
+  --secondary-color: #a29bfe;
+  --accent-color: #fd79a8;
+  --light-bg: #f8f9fa;
+  --dark-bg: #343a40;
+  --success: #00b894;
+  --danger: #d63031;
+  --warning: #fdcb6e;
+  --info: #0984e3;
+}
+
+/* Styles généraux */
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  background-color: #f5f6fa;
+}
+
+.navbar-brand i {
+  margin-right: 0.5rem;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* Animations et transitions */
+.playlist-card {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.playlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Liste des playlists */
+.list-group-item {
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+  border-left-color: var(--secondary-color);
+}
+
+.list-group-item.active {
+  border-left-color: var(--primary-color);
+  background-color: rgba(108, 92, 231, 0.1);
+  color: var(--primary-color);
+}
+
+.list-group-item.active .text-muted {
+  color: var(--primary-color) !important;
+  opacity: 0.7;
+}
+
+/* Liste des pistes */
+.track-list {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.track-item:hover {
+  background-color: rgba(108, 92, 231, 0.05) !important;
+}
+
+.track-item td {
+  padding: 12px 15px;
+  vertical-align: middle;
+}
+
+/* Badges et étiquettes */
+.badge {
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 50px;
+}
+
+/* Boutons */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Formulaires */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(108, 92, 231, 0.25);
+}
+
+/* Templates et règles */
+.template-item {
+  background-color: #fff;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.template-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.rule-item {
+  background-color: var(--light-bg);
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin: 5px 0;
+}
+
+/* Indicateur de chargement */
+.loading {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1100;
+}
+
+.loading .spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Indicateurs de statut */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.status-indicator.active {
+  background-color: var(--success);
+}
+
+.status-indicator.inactive {
+  background-color: var(--warning);
+}
+
+/* Personnalisation des scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8c8c8;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a5a5a5;
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 992px) {
+  .sidebar {
+    height: auto !important;
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    margin-bottom: 1rem;
+  }
+
+  .track-list {
+    max-height: 400px;
+  }
+}

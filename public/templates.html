@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modèles de Playlists</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <i class="bi bi-music-note-list"></i> Smart Playlist Generator
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="bi bi-house"></i> Accueil
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/templates.html">
+                <i class="bi bi-bookmarks"></i> Modèles
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/help.html">
+                <i class="bi bi-question-circle"></i> Aide
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="bi bi-bookmark-star"></i> Modèles de Playlists
+              </h2>
+              <p class="card-text">
+                Les modèles vous permettent de générer rapidement des playlists
+                basées sur des critères spécifiques. Utilisez ces modèles
+                prédéfinis ou créez les vôtres pour explorer votre bibliothèque
+                musicale.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="mb-4">
+            <h3>
+              <i class="bi bi-bookmark-check"></i> Modèles standards
+              <button
+                id="refreshTemplatesBtn"
+                class="btn btn-sm btn-outline-primary float-end"
+              >
+                <i class="bi bi-arrow-clockwise"></i> Actualiser
+              </button>
+            </h3>
+            <p class="text-muted">
+              Modèles basiques pour explorer différents genres et périodes
+              musicales
+            </p>
+
+            <div class="row" id="standardTemplates">
+              <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-2 text-muted">Chargement des modèles...</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h3><i class="bi bi-bookmark-star"></i> Modèles avancés</h3>
+            <p class="text-muted">
+              Modèles avec des règles complexes pour des sélections plus
+              précises
+            </p>
+
+            <div class="row" id="advancedTemplates">
+              <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-2 text-muted">Chargement des modèles...</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3>
+                <i class="bi bi-plus-circle"></i> Créer un modèle personnalisé
+              </h3>
+              <p>
+                Vous pouvez créer vos propres modèles personnalisés en
+                spécifiant des règles précises. Ces modèles seront sauvegardés
+                et pourront être utilisés pour générer des playlists.
+              </p>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a href="/" class="btn btn-primary">
+                  <i class="bi bi-plus-circle"></i> Créer un modèle personnalisé
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container pour les toasts -->
+    <div
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+      id="toast-container"
+    ></div>
+
+    <!-- Indicateur de chargement -->
+    <div class="loading" id="loadingIndicator" style="display: none">
+      <div
+        class="spinner-border text-light"
+        role="status"
+        style="width: 3rem; height: 3rem"
+      >
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Éléments du DOM
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        const standardTemplatesContainer =
+          document.getElementById("standardTemplates");
+        const advancedTemplatesContainer =
+          document.getElementById("advancedTemplates");
+        const refreshTemplatesBtn = document.getElementById(
+          "refreshTemplatesBtn"
+        );
+        const toastContainer = document.getElementById("toast-container");
+
+        // Afficher/masquer l'indicateur de chargement
+        function toggleLoading(show) {
+          loadingIndicator.style.display = show ? "flex" : "none";
+        }
+
+        // Afficher une notification toast
+        function showToast(message, type = "info") {
+          const toast = document.createElement("div");
+          toast.className = `toast show toast-${type} fade-in`;
+          toast.setAttribute("role", "alert");
+          toast.setAttribute("aria-live", "assertive");
+          toast.setAttribute("aria-atomic", "true");
+
+          const iconClass =
+            type === "success"
+              ? "bi-check-circle-fill"
+              : type === "error"
+              ? "bi-x-circle-fill"
+              : type === "warning"
+              ? "bi-exclamation-triangle-fill"
+              : "bi-info-circle-fill";
+
+          toast.innerHTML = `
+          <div class="toast-header">
+            <i class="bi ${iconClass} me-2"></i>
+            <strong class="me-auto">${
+              type.charAt(0).toUpperCase() + type.slice(1)
+            }</strong>
+            <small>à l'instant</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            ${message}
+          </div>
+        `;
+
+          toastContainer.appendChild(toast);
+
+          // Supprimer le toast après 5 secondes
+          setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 500);
+          }, 5000);
+
+          // Configurer le bouton de fermeture
+          const closeBtn = toast.querySelector(".btn-close");
+          closeBtn.addEventListener("click", () => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 500);
+          });
+        }
+
+        // Échapper les caractères HTML pour éviter les injections XSS
+        function escapeHtml(text) {
+          if (!text) return "";
+          const map = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;",
+          };
+          return text.toString().replace(/[&<>"']/g, (m) => map[m]);
+        }
+
+        // Récupérer les modèles prédéfinis
+        async function fetchTemplates() {
+          try {
+            toggleLoading(true);
+
+            const response = await fetch("/api/templates");
+            const data = await response.json();
+
+            if (data.success) {
+              displayTemplates(data.templates);
+            } else {
+              showToast(
+                `Erreur lors du chargement des modèles: ${data.error}`,
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error fetching templates:", error);
+            showToast("Erreur lors du chargement des modèles", "error");
+          } finally {
+            toggleLoading(false);
+          }
+        }
+
+        // Afficher les modèles
+        function displayTemplates(templates) {
+          // Séparer les modèles standards et avancés
+          const standardTemplates = templates.filter((t) => !t.advanced);
+          const advancedTemplates = templates.filter((t) => t.advanced);
+
+          // Afficher les modèles standards
+          standardTemplatesContainer.innerHTML = "";
+          if (standardTemplates.length === 0) {
+            standardTemplatesContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+              <i class="bi bi-exclamation-circle" style="font-size: 2rem;"></i>
+              <p class="mt-2">Aucun modèle standard disponible</p>
+            </div>
+          `;
+          } else {
+            standardTemplates.forEach((template) => {
+              const card = document.createElement("div");
+              card.className = "col-md-4 mb-3";
+
+              card.innerHTML = `
+              <div class="card h-100 template-card">
+                <div class="card-body">
+                  <h5 class="card-title">${escapeHtml(template.name)}</h5>
+                  <p class="card-text small text-muted">${escapeHtml(
+                    template.description || ""
+                  )}</p>
+                  <div class="small mb-3">
+                    <strong>Règles:</strong>
+                    <ul class="mb-0 ps-3">
+                      ${template.rules
+                        .map((rule) => `<li>${formatRule(rule)}</li>`)
+                        .join("")}
+                    </ul>
+                  </div>
+                  <div class="d-grid">
+                    <a href="/?template=${encodeURIComponent(
+                      template.name
+                    )}" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-plus-circle"></i> Utiliser
+                    </a>
+                  </div>
+                </div>
+              </div>
+            `;
+
+              standardTemplatesContainer.appendChild(card);
+            });
+          }
+
+          // Afficher les modèles avancés
+          advancedTemplatesContainer.innerHTML = "";
+          if (advancedTemplates.length === 0) {
+            advancedTemplatesContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+              <i class="bi bi-exclamation-circle" style="font-size: 2rem;"></i>
+              <p class="mt-2">Aucun modèle avancé disponible</p>
+            </div>
+          `;
+          } else {
+            advancedTemplates.forEach((template) => {
+              const card = document.createElement("div");
+              card.className = "col-md-6 mb-3";
+
+              let advancedInfo = "";
+              if (template.advanced) {
+                advancedInfo = `
+                <div class="alert alert-info small mt-2 mb-0">
+                  <strong>Paramètres avancés:</strong>
+                  <ul class="mb-0 ps-3">
+                    ${Object.entries(template.advanced)
+                      .map(([key, value]) => `<li>${key}: ${value}</li>`)
+                      .join("")}
+                  </ul>
+                </div>
+              `;
+              }
+
+              card.innerHTML = `
+              <div class="card h-100 template-card">
+                <div class="card-body">
+                  <h5 class="card-title">${escapeHtml(template.name)}</h5>
+                  <p class="card-text small text-muted">${escapeHtml(
+                    template.description || ""
+                  )}</p>
+                  <div class="small mb-3">
+                    <strong>Règles:</strong>
+                    <ul class="mb-0 ps-3">
+                      ${template.rules
+                        .map((rule) => `<li>${formatRule(rule)}</li>`)
+                        .join("")}
+                    </ul>
+                  </div>
+                  ${advancedInfo}
+                  <div class="d-grid mt-3">
+                    <a href="/?template=${encodeURIComponent(
+                      template.name
+                    )}" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-plus-circle"></i> Utiliser
+                    </a>
+                  </div>
+                </div>
+              </div>
+            `;
+
+              advancedTemplatesContainer.appendChild(card);
+            });
+          }
+        }
+
+        // Formater une règle pour l'affichage
+        function formatRule(rule) {
+          switch (rule.type) {
+            case "genre":
+              return `Genre: ${escapeHtml(rule.value)}`;
+            case "artist":
+              return `Artiste: ${escapeHtml(rule.value)}`;
+            case "folder":
+              return `Dossier: ${escapeHtml(rule.value)}`;
+            case "year":
+              if (rule.operator === "between") {
+                return `Année: entre ${rule.value[0]} et ${rule.value[1]}`;
+              } else if (rule.operator === ">") {
+                return `Année: après ${rule.value}`;
+              } else if (rule.operator === "<") {
+                return `Année: avant ${rule.value}`;
+              } else {
+                return `Année: ${rule.value}`;
+              }
+            default:
+              return `${rule.type}: ${rule.value}`;
+          }
+        }
+
+        // Initialisation
+        function init() {
+          // Charger les modèles
+          fetchTemplates();
+
+          // Configurer le bouton d'actualisation
+          refreshTemplatesBtn.addEventListener("click", fetchTemplates);
+        }
+
+        // Initialiser la page
+        init();
+      });
+    </script>
+  </body>
+</html>
