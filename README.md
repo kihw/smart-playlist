@@ -364,5 +364,6 @@ const SmartPlaylistGenerator = require("./index.js");
 ```
 
 N'hésitez pas à explorer et expérimenter avec les différentes options pour créer des playlists parfaitement adaptées à votre collection musicale et à vos goûts!
-#   s m a r t - p l a y l i s t  
+#   s m a r t - p l a y l i s t 
+ 
  
